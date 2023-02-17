@@ -5,3 +5,4 @@ store_1/products/__pycache__
 store_1/products/migrations/__pycache__
 store_1/store_1/__pycache__
 store_1/db.sqlite3
+setup.cfg
