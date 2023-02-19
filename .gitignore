@@ -6,3 +6,5 @@ store_1/products/migrations/__pycache__
 store_1/store_1/__pycache__
 store_1/db.sqlite3
 setup.cfg
+store_1/.idea
+store_1/__pycache__
