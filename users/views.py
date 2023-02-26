@@ -3,7 +3,7 @@ from django.contrib import auth
 from django.urls import reverse
 
 from users.models import User
-from users.forms import UserLoginForm
+from users.forms import UserLoginForm, UserRegisterForm
 
 
 def login(request):
@@ -25,4 +25,14 @@ def login(request):
 
 
 def register(request):
-    return render(request, 'users/register.html')
+    if request.method == "POST":
+        form = UserRegisterForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('users:login'))
+    else:
+        form = UserRegisterForm()
+        
+    context = {'form': form}
+    
+    return render(request, 'users/register.html', context)
