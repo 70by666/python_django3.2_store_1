@@ -10,5 +10,5 @@ setup.cfg
 /media
 users/__pycache__
 users/migrations/__pycache__
-
+.env
 
