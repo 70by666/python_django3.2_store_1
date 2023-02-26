@@ -1,8 +1,9 @@
-{% extends 'products/base.html' %} 
+{% extends 'products/base.html' %}
 
-{% load static %} 
+{% load static %}
 
-{% block css %} <link href="{% static 'vendor/css/index.css'%}" rel="stylesheet" /> {% endblock css %} 
+{% block css %}
+<link href="{% static 'vendor/css/index.css'%}" rel="stylesheet" /> {% endblock css %}
 
 {% block content %}
 <section>
@@ -20,15 +21,13 @@
                     по всему миру! Аутлет: до -70% Собственный бренд. -20% новым
                     покупателям.
                 </p>
-                <button
-                    id="start-purchase-btn"
-                    type="button"
-                    class="btn btn-lg"
-                >
-                    <a id="start-purchase-link" href="{% url 'products:index' %}">
+                <a id="start-purchase-link" href="{% url 'products:index' %}">
+                    <button id="start-purchase-btn" type="button" class="btn btn-lg">
+
                         Начать покупки
-                    </a>
-                </button>
+
+                    </button>
+                </a>
             </div>
         </div>
     </div>
