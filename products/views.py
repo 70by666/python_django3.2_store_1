@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 
 from products.models import ProductCategory, Product, Basket
 
@@ -42,4 +43,16 @@ def basket_remove(request, basket_id):
     basket = Basket.objects.get(id=basket_id)
     basket.delete()
     
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+@login_required
+def basket_remove_one_item(request, product_id):
+    basket = Basket.objects.get(user=request.user, product_id=product_id)
+    if basket.quantity == 1:
+        basket.delete()
+    else:
+        basket.quantity -= 1
+        basket.save()
+        
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
