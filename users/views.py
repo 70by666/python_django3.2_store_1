@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import auth, messages
 from django.urls import reverse
+from django.http import HttpResponse
 
 from users.models import User
 from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm
@@ -40,6 +41,9 @@ def register(request):
 
 
 def profile(request):
+    if not request.user.is_authenticated:
+        return HttpResponse(render(request, '401.html'), status=401)
+    
     if request.method == 'POST':
         form = UserProfileForm(instance=request.user, 
                                data=request.POST, 
