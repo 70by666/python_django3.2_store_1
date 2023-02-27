@@ -65,9 +65,11 @@
                                 </p>
                             </div>
                             <div class="card-footer text-center">
-                                <button type="button" class="btn btn-outline-success">
-                                    Отправить в корзину
-                                </button>
+                                <a href="{% url 'products:basket_add' prod.id %}">
+                                    <button type="button" class="btn btn-outline-success">
+                                        Отправить в корзину
+                                    </button>
+                                </a>
                             </div>
                         </div>
                     </div>
