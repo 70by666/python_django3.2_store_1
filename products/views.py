@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 from products.models import ProductCategory, Product, Basket
 
@@ -11,22 +11,28 @@ class IndexView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = 'Store'
+        context['title'] = 'Store'
         
         return context
 
 
-def products(request, category_id=None, page_num=1):
-    products = Product.objects.filter(category=category_id) if category_id else Product.objects.all()
-    paginator = Paginator(object_list=products, per_page=3)
-    products_paginator = paginator.page(page_num)
-    context = {
-        'title': 'Store - Каталог', 
-        'categories': ProductCategory.objects.all(),
-        'products': products_paginator,
-    }
+class ProductsListView(ListView):
+    model = Product
+    template_name = 'products/products.html'
+    paginate_by = 3
     
-    return render(request, 'products/products.html', context=context)
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        category_id = self.kwargs.get('category_id')
+        
+        return queryset.filter(category_id=category_id) if category_id else queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Store - Каталог'
+        context['categories'] = ProductCategory.objects.all()
+        
+        return context
 
 
 @login_required
