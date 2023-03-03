@@ -1,5 +1,11 @@
 {% extends 'products/base.html' %}
 
+{% load static %}
+
+{% block css %}
+<link href="{% static 'vendor/css/index.css'%}" rel="stylesheet" /> 
+{% endblock css %}
+
 {% block content %}
 <h1 style="text-align: center; padding-top: 2em;">Страница не найдена, 404</h1>
 {% endblock content %}
