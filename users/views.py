@@ -22,11 +22,6 @@ class RegisterView(CommonContextMixin, SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('users:login')
     success_message = 'Регистрация прошла успешно!'
     title = 'Store - Регистрация'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        
-        return context
 
 
 class ProfileView(CommonContextMixin, UpdateView):
