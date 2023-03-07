@@ -15,7 +15,6 @@ from pathlib import Path
 
 import environ
 
-
 env = environ.Env(
     DEBUG=(bool),
     SECRET_KEY=(str),
