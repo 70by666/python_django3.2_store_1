@@ -51,7 +51,7 @@ class EmailVerificationView(CommonContextMixin, TemplateView):
         user = User.objects.get(email=kwargs['email'])
         emailverifications = EmailVerification.objects.filter(user=user,
                                                               code=code)
-        if emailverifications.exists() and not emailverifications.first().is_expired:
+        if emailverifications.exists() and emailverifications.first().is_expired():
             user.is_verified_email = True
             user.save()
             return super().get(request, *args, **kwargs)
