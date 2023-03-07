@@ -6,7 +6,6 @@ from django.contrib.messages.views import SuccessMessageMixin
 
 from users.models import User, EmailVerification
 from users.forms import LoginForm, RegisterForm, ProfileForm
-from products.models import Basket
 from common.views import CommonContextMixin
 
 
