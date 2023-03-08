@@ -8,7 +8,7 @@ setup.cfg
 /.idea
 /__pycache__
 /media
-users/__pycache__
-users/migrations/__pycache__
+/users/__pycache__
+/users/migrations/__pycache__
 .env
-
+/common/__pycache__/ 
