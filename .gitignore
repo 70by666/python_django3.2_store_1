@@ -12,3 +12,5 @@ setup.cfg
 /users/migrations/__pycache__
 .env
 /common/__pycache__/ 
+/orders/__pycache__
+/orders/migrations/__pycache__
