@@ -197,12 +197,12 @@ LOGOUT_REDIRECT_URL = '/'
 
 # send email
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_HOST = env('EMAIL_HOST')
-# EMAIL_PORT = env('EMAIL_PORT')
-# EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-# EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-# EMAIL_USE_SSL = env('EMAIL_USE_SSL')
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_USE_SSL = env('EMAIL_USE_SSL')
 
 # oauth
 
@@ -222,3 +222,7 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
     }
 }
+
+# celery
+CELERY_BROKER_URL = f'redis://:{env("REDIS_PASSWORD")}@127.0.0.1:6379/1'
+CELERY_RESULT_BACKEND = f'redis://:{env("REDIS_PASSWORD")}@127.0.0.1:6379/1'
