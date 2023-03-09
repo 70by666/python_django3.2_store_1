@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import HttpResponseRedirect
 from django.views.generic import ListView, TemplateView
+from django.core.cache import cache
+
 
 from common.views import CommonContextMixin
 from products.models import Basket, Product, ProductCategory
@@ -18,7 +20,11 @@ class ProductsListView(CommonContextMixin, ListView):
     title = 'Store - Каталог'
     
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = cache.get('queryset')
+        if not queryset:
+            queryset = super().get_queryset()
+            cache.set('queryset', queryset, 30)
+            
         category_id = self.kwargs.get('category_id')
         
         return queryset.filter(category_id=category_id) if category_id else queryset
