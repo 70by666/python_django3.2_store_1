@@ -2,7 +2,7 @@ import stripe
 from http import HTTPStatus
 
 from django.http import HttpResponseRedirect, HttpResponse
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, TemplateView, ListView
 from django.urls import reverse, reverse_lazy
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -25,6 +25,18 @@ class SuccessTemplateView(CommonContextMixin, TemplateView):
 class CancelTemplateView(CommonContextMixin, TemplateView):
     template_name = 'orders/cancel.html'
 
+
+class OrderListView(CommonContextMixin, ListView):
+    template_name = 'orders/orders.html'
+    title = 'Store - Заказы'
+    queryset = Order.objects.all()
+    ordering = ('-id')
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        
+        return queryset.filter(initiator=self.request.user)
+    
 
 class OrderCreateView(CommonContextMixin, CreateView):
     template_name = 'orders/order-create.html'
