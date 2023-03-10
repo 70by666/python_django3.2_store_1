@@ -1,8 +1,7 @@
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from django.shortcuts import HttpResponseRedirect
 from django.views.generic import ListView, TemplateView
-from django.core.cache import cache
-
 
 from common.views import CommonContextMixin
 from products.models import Basket, Product, ProductCategory

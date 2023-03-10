@@ -1,18 +1,16 @@
-import stripe
 from http import HTTPStatus
 
-from django.http import HttpResponseRedirect, HttpResponse
-from django.views.generic import CreateView, TemplateView, ListView
-from django.urls import reverse, reverse_lazy
+import stripe
 from django.conf import settings
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import CreateView, DetailView, ListView, TemplateView
 
+from common.views import CommonContextMixin
 from orders.forms import OrderForm
 from orders.models import Order
 from products.models import Basket
-
-from common.views import CommonContextMixin
-
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -36,6 +34,17 @@ class OrderListView(CommonContextMixin, ListView):
         queryset = super().get_queryset()
         
         return queryset.filter(initiator=self.request.user)
+
+
+class OrderDetailView(DetailView):
+    template_name = 'orders/order.html'
+    model = Order
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = f'Заказ №{self.object.id}'
+        
+        return context
     
 
 class OrderCreateView(CommonContextMixin, CreateView):
@@ -46,6 +55,10 @@ class OrderCreateView(CommonContextMixin, CreateView):
 
     def post(self, request, *args, **kwargs):
         super().post(request, *args, **kwargs)
+        form = self.get_form()
+        if not form.is_valid():
+            return self.form_invalid(form)
+        
         basket = Basket.objects.filter(user=self.request.user)   
         checkout_session = stripe.checkout.Session.create(
             line_items=basket.stripe_products(),
@@ -61,6 +74,9 @@ class OrderCreateView(CommonContextMixin, CreateView):
         form.instance.initiator = self.request.user
         
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
 
 
 @csrf_exempt

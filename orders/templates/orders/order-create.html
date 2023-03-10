@@ -10,9 +10,14 @@
 
 {% block content %}
     <section>
-        <div class="alert alert-warning text-center" role="alert">
-            Пожалуйста, заполните адрес электронной почты.
-        </div>
+        {% if form.errors %}
+            <div class="alert alert-warning text-center" role="alert">
+                {{ form.errors }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
         <div class="container">
             <div class="py-5 text-center">
                 <h1>Оформление заказа</h1>
