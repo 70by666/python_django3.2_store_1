@@ -1,0 +1,14 @@
+Django==3.2.18
+Pillow==9.4.0
+django-allauth==0.52.0
+django-environ==0.9.0
+django-extensions==3.2.1
+django_debug_toolbar==3.8.1
+
+psycopg2-binary==2.9.5
+
+redis==4.5.1
+celery==5.2.7
+django-redis==5.2.0
+
+stripe==5.2.0

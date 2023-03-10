@@ -18,6 +18,7 @@ import environ
 env = environ.Env(
     DEBUG=(bool),
     SECRET_KEY=(str),
+    DOMAIN_NAME=(str),
     
     EMAIL_HOST=(str),
     EMAIL_PORT=(int),
@@ -31,11 +32,13 @@ env = environ.Env(
     DATABASE_HOST=(str),
     DATABASE_PORT=(str),
     
-    REDIS_USER=(str),
+    REDIS_HOST=(str),
+    REDIS_PORT=(str),
     REDIS_PASSWORD=(str),
     
     STRIPE_PUBLIC_KEY=(str),
     STRIPE_SECRET_KEY=(str),
+    STRIPE_WEBHOOK_SECRET=(str),
 )
 
 
@@ -56,7 +59,7 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
-DOMAIN_NAME = 'http://127.0.0.1:8000'
+DOMAIN_NAME = env('DOMAIN_NAME')
 
 
 # Application definition
@@ -76,6 +79,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
+    'django_extensions',
 
     'products',
     'users',
@@ -119,10 +123,16 @@ INTERNAL_IPS = [
     'localhost',
 ]
 
+# redis
+
+REDIS_HOST = env("REDIS_HOST")
+REDIS_PORT = env("REDIS_PORT")
+REDIS_PASSWORD = env("REDIS_PASSWORD")
+
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': f'redis://:{env("REDIS_PASSWORD")}@127.0.0.1:6379/1',
+        'LOCATION': f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/1',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
@@ -202,12 +212,14 @@ LOGOUT_REDIRECT_URL = '/'
 
 # send email
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = env('EMAIL_HOST')
-EMAIL_PORT = env('EMAIL_PORT')
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-EMAIL_USE_SSL = env('EMAIL_USE_SSL')
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_HOST = env('EMAIL_HOST')
+    EMAIL_PORT = env('EMAIL_PORT')
+    EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+    EMAIL_USE_SSL = env('EMAIL_USE_SSL')
 
 # oauth
 
@@ -229,8 +241,8 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 # celery
-CELERY_BROKER_URL = f'redis://:{env("REDIS_PASSWORD")}@127.0.0.1:6379/1'
-CELERY_RESULT_BACKEND = f'redis://:{env("REDIS_PASSWORD")}@127.0.0.1:6379/1'
+CELERY_BROKER_URL = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/1'
+CELERY_RESULT_BACKEND = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/1'
 
 # stripe
 
