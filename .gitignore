@@ -17,3 +17,4 @@ orders/migrations/__pycache__
 static/admin
 static/debug_toolbar/
 static/django_extensions/
+log.log
