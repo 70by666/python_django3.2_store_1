@@ -44,7 +44,7 @@
             </div>
         </div>
         <div class="col-lg-5">
-            {% include 'products/basket.html' %}
+            {% if object == request.user %} {% include 'products/basket.html' %} {% endif %}
         </div>
     </div>
 </div>

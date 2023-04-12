@@ -106,6 +106,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django.contrib.humanize',
     
+    'rest_framework',
+    
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -113,9 +115,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.vk',
     'django_extensions',
 
-    'products',
-    'users',
-    'orders',
+    'api.api_v1.apps.ApiConfig',
+    'products.apps.ProductsConfig',
+    'users.apps.UsersConfig',
+    'orders.apps.OrdersConfig',
 ]
 
 MIDDLEWARE = [

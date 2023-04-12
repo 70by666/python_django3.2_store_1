@@ -1,9 +1,10 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, TemplateView, UpdateView, DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import (CreateView, DetailView, TemplateView,
+                                  UpdateView)
 
 from common.views import CommonContextMixin, ReverseProfileMixin
 from users.forms import LoginForm, ProfileForm, RegisterForm
