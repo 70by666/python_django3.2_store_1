@@ -2,14 +2,15 @@ from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, TemplateView, UpdateView
+from django.views.generic import CreateView, TemplateView, UpdateView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-from common.views import CommonContextMixin
+from common.views import CommonContextMixin, ReverseProfileMixin
 from users.forms import LoginForm, ProfileForm, RegisterForm
 from users.models import EmailVerification, User
 
 
-class LoginView(CommonContextMixin, LoginView):
+class LoginView(ReverseProfileMixin, CommonContextMixin, LoginView):
     template_name = 'users/login.html'
     form_class = LoginForm
     title = 'Store - Авторизация'
@@ -24,15 +25,28 @@ class RegisterView(CommonContextMixin, SuccessMessageMixin, CreateView):
     title = 'Store - Регистрация'
 
 
-class ProfileView(CommonContextMixin, UpdateView):
+class ProfileView(LoginRequiredMixin, DetailView):
     model = User
-    form_class = ProfileForm
     template_name = 'users/profile.html'
-    success_url = reverse_lazy('users:profile')
-    title = 'Store - Профиль'
     
-    def get_success_url(self):
-        return reverse_lazy('users:profile', args=(self.object.id,))
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = f'{self.object.id} - {self.object}'
+        
+        return context
+
+
+class ProfileEditView(ReverseProfileMixin, SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    """
+    Контроллер редактирования прфоиля
+    """
+    template_name = 'users/profile_edit.html'    
+    form_class = ProfileForm
+    model = User
+    success_message = 'Профиль изменен!'
+
+    def get_object(self, queryset=None):
+        return self.request.user
 
 
 class EmailVerificationView(CommonContextMixin, TemplateView):

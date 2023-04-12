@@ -1,3 +1,6 @@
+from django.urls import reverse_lazy
+
+
 class CommonContextMixin:
     title = None
     
@@ -6,3 +9,8 @@ class CommonContextMixin:
         context['title'] = self.title
         
         return context
+
+
+class ReverseProfileMixin:
+    def get_success_url(self):
+        return reverse_lazy('users:profile', args=(self.request.user.id,))

@@ -11,7 +11,9 @@ from users.models import EmailVerification, User
 def send_email_verify(user_id):
     user = User.objects.get(id=user_id)
     expiration = now() + timedelta(hours=24)
-    record = EmailVerification.objects.create(code=uuid.uuid4(), 
-                                                user=user, 
-                                                expiration=expiration)
+    record = EmailVerification.objects.create(
+        code=uuid.uuid4(), 
+        user=user, 
+        expiration=expiration,
+    )
     record.send_verification_email()
