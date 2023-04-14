@@ -31,16 +31,17 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'продукт'
         verbose_name_plural = 'Продукты'
+        ordering = ('id',)
         
     def __str__(self):
         return f'Продукт - {self.name} | Категория - {self.category.name}'
     
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+    def save(self, *args, **kwargs):
         if not self.stripe_product_price_id:
             stripe_product_price = self.create_stripe_product_price()
             self.stripe_product_price_id = stripe_product_price['id']
             
-        super().save(force_insert, force_update, using, update_fields)
+        super().save(*args, **kwargs)
     
     def create_stripe_product_price(self):
         stripe_product = stripe.Product.create(name=self.name)
