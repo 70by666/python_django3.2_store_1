@@ -1,6 +1,7 @@
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import (RetrieveUpdateDestroyAPIView, ListCreateAPIView)
 
-from api.api_v1.serializers import ProductSerializer, ProductCreateSerializer
+from api.api_v1.serializers import (ProductCreateSerializer, ProductSerializer,
+                                    ProductUpdateSerializer)
 from products.models import Product
 
 
@@ -18,3 +19,8 @@ class ProductsListCreateAPIView(ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         self.serializer_class = ProductCreateSerializer
         return self.create(request, *args, **kwargs)
+
+
+class ProductsDetailAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductUpdateSerializer
