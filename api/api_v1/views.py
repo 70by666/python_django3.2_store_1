@@ -1,8 +1,8 @@
 from rest_framework.decorators import action
-from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.viewsets import ModelViewSet
 
+from api.api_v1.permissions import IsSuperUser
 from api.api_v1.serializers import (ProductCategorySerializer,
                                     ProductSerializer, UserSerializer)
 from products.models import Product, ProductCategory
@@ -12,6 +12,7 @@ from users.models import User
 class ProductsViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = (IsSuperUser,)
     
     @action(methods=['GET'], detail=False)
     def categories(self, request):
@@ -24,6 +25,7 @@ class ProductsViewSet(ModelViewSet):
         return Response(ProductSerializer(products, many=True).data)
 
 
-class UsersViewSet(UpdateModelMixin, ReadOnlyModelViewSet):
+class UsersViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (IsSuperUser,)
