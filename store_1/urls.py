@@ -17,6 +17,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
+from rest_framework_simplejwt.views import (TokenObtainPairView,
+                                            TokenRefreshView, TokenVerifyView)
 
 from orders.views import stripe_webhook_view
 from products.views import IndexView
@@ -31,6 +33,9 @@ urlpatterns = [
     path('api/v1/', include('api.api_v1.urls', namespace='api_v1')),
     path('api/v1/drf-auth/', include('rest_framework.urls')),
     path('api/v1/auth/', include('djoser.urls')),
+    path('api/v1/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/v1/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
     path('webhook/stripe/', stripe_webhook_view, name='stripe_webhook'),
 ]
